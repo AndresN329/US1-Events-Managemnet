@@ -1,45 +1,38 @@
 package com.riwi.ticketup.service;
 
 import com.riwi.ticketup.dto.VenueDTO;
+import com.riwi.ticketup.exception.ResourceNotFoundException;
 import com.riwi.ticketup.repository.VenueRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class VenueService {
-    private final VenueRepository repository;
 
-    public VenueService(VenueRepository repository) {
-        this.repository = repository;
-    }
+    private final VenueRepository repository;
 
     public List<VenueDTO> getAll() {
         return repository.findAll();
     }
 
-    public Optional<VenueDTO> getById(Long id) {
-        return repository.findById(id);
+    public VenueDTO getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("El venue (lugar) con ID " + id + " no existe"));
     }
 
     public VenueDTO create(VenueDTO venue) {
         return repository.save(venue);
     }
 
-    public Optional<VenueDTO> update(Long id, VenueDTO updatedVenue) {
-        Optional<VenueDTO> existingVenue = repository.findById(id);
-        if (existingVenue.isPresent()) {
-            VenueDTO v = existingVenue.get();
-            v.setName(updatedVenue.getName());
-            v.setCapacity(updatedVenue.getCapacity());
-            v.setAddress(updatedVenue.getAddress());
-            return Optional.of(v);
-        }
-        return Optional.empty();
-    }
+    public void delete(Long id) {
+        boolean deleted = repository.delete(id);
 
-    public boolean delete(Long id) {
-        return repository.delete(id);
+        if (!deleted) {
+            throw new ResourceNotFoundException("No se pudo eliminar. El venue con ID " + id + " no existe");
+        }
     }
 }
