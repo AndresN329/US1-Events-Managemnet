@@ -67,6 +67,16 @@ public class EventController {
         return ResponseEntity.ok(service.create(event));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<EventDTO> update(@PathVariable Long id, @RequestBody EventDTO event) {
+        if (event.getName() == null || event.getName().isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return service.update(id, event)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar evento por ID")
     @ApiResponses({

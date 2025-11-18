@@ -20,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Venues", description = "Gestión de venues (lugares) del catálogo")
 public class VenueController {
-
     private final VenueService service;
 
     // GET ALL
