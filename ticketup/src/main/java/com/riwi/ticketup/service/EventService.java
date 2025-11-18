@@ -3,6 +3,7 @@ package com.riwi.ticketup.service;
 import com.riwi.ticketup.dto.EventDTO;
 import com.riwi.ticketup.repository.EventRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,19 @@ public class EventService {
 
     public EventDTO create(EventDTO event) {
         return repository.save(event);
+    }
+
+    public Optional<EventDTO> update(Long id, EventDTO updatedEvent) {
+        Optional<EventDTO> existingEvent = repository.findById(id);
+        if (existingEvent.isPresent()) {
+            EventDTO e = existingEvent.get();
+            e.setName(updatedEvent.getName());
+            e.setDate(updatedEvent.getDate());
+            e.setLocation(updatedEvent.getLocation());
+            e.setVenueId(updatedEvent.getVenueId());
+            return Optional.of(e);
+        }
+        return Optional.empty();
     }
 
     public boolean delete(Long id) {

@@ -4,12 +4,12 @@ import com.riwi.ticketup.dto.VenueDTO;
 import com.riwi.ticketup.service.VenueService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/venues")
 public class VenueController {
-
     private final VenueService service;
 
     public VenueController(VenueService service) {
@@ -34,6 +34,16 @@ public class VenueController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(service.create(venue));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<VenueDTO> update(@PathVariable Long id, @RequestBody VenueDTO venue) {
+        if (venue.getName() == null || venue.getName().isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return service.update(id, venue)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
