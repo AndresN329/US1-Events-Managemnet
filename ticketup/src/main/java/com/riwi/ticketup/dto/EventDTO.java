@@ -1,27 +1,36 @@
 package com.riwi.ticketup.dto;
 
-import java.time.LocalDate;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
+@Data
+@Schema(
+        name = "Event",
+        description = "Representa un evento dentro del catálogo, incluyendo su nombre, descripción y el ID del venue donde se realizará."
+)
 public class EventDTO {
+
+    @Schema(
+            description = "Identificador único del evento",
+            example = "1"
+    )
     private Long id;
+
+    @Schema(
+            description = "Nombre del evento. No puede estar vacío.",
+            example = "Concierto de Rock"
+    )
     private String name;
-    private LocalDate date;
-    private String location;
+
+    @Schema(
+            description = "Descripción detallada del evento",
+            example = "Un espectáculo musical con artistas invitados."
+    )
+    private String description;
+
+    @Schema(
+            description = "ID del venue donde se realizará el evento",
+            example = "5"
+    )
     private Long venueId;
-
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public LocalDate getDate() { return date; }
-    public void setDate(LocalDate date) { this.date = date; }
-
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-
-    public Long getVenueId() { return venueId; }
-    public void setVenueId(Long venueId) { this.venueId = venueId; }
 }
