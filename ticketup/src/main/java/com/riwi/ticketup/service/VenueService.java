@@ -3,6 +3,7 @@ package com.riwi.ticketup.service;
 import com.riwi.ticketup.dto.VenueDTO;
 import com.riwi.ticketup.repository.VenueRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,18 @@ public class VenueService {
 
     public VenueDTO create(VenueDTO venue) {
         return repository.save(venue);
+    }
+
+    public Optional<VenueDTO> update(Long id, VenueDTO updatedVenue) {
+        Optional<VenueDTO> existingVenue = repository.findById(id);
+        if (existingVenue.isPresent()) {
+            VenueDTO v = existingVenue.get();
+            v.setName(updatedVenue.getName());
+            v.setCapacity(updatedVenue.getCapacity());
+            v.setAddress(updatedVenue.getAddress());
+            return Optional.of(v);
+        }
+        return Optional.empty();
     }
 
     public boolean delete(Long id) {

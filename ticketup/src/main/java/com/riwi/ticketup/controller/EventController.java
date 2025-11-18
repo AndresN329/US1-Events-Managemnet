@@ -4,6 +4,7 @@ import com.riwi.ticketup.dto.EventDTO;
 import com.riwi.ticketup.service.EventService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -33,6 +34,16 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(service.create(event));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EventDTO> update(@PathVariable Long id, @RequestBody EventDTO event) {
+        if (event.getName() == null || event.getName().isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return service.update(id, event)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
